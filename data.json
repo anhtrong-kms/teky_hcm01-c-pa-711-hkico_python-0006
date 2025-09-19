@@ -15,7 +15,7 @@
       "name": "Học phần 1: Python Cơ Bản",
       "sessions": [
         {
-            "date": "12/09/2025",
+            "date": "2025-09-12",
             "topic": "Ôn tập về biến & Kiểu dữ liệu",
             "attendance": { 
                 "Teky_HCM01-001783": true, 
@@ -31,19 +31,27 @@
             }
         },
         {
-            "date": "19/09/2025",
+            "date": "2025-09-19",
             "topic": "Ôn tập về cấu trúc rẽ nhánh và bài kiểm tra đầu tiên",
             "attendance": { 
                 "Teky_HCM01-001783": true, 
                 "HCM-NTT-004598": true
             },
             "scores": { 
-                "Teky_HCM01-001783": 0.0,  
-                "HCM-NTT-004598": 0.0
+                "Teky_HCM01-001783": 8.4,  
+                "HCM-NTT-004598": 7.8
             },
             "remarks": { 
-                "Teky_HCM01-001783": "NaN",
-                "HCM-NTT-004598": "NaN"
+                "Teky_HCM01-001783": "<p>Trong 2 buổi luyện thi HKICO, học sinh <b>Đặng Minh Khôi</b> đã thể hiện nền tảng <b><i>kiến thức cơ bản vững chắc</i></b> về biến, kiểu dữ liệu, toán tử số học và cấu trúc rẽ nhánh, với <u>tốc độ làm bài ổn định</u> (100 câu/59 phút) và độ chính xác cao ở phần dễ và trung bình. <br><br>Điểm mạnh của học sinh là <b>khả năng duy trì sự tập trung</b> và <b>xử lý nhanh các câu cơ bản</b>. Tuy nhiên, học sinh còn hạn chế ở các câu <i>logic phức hợp</i>, <i>điều kiện lồng</i> và các bẫy cú pháp như <code>//</code>, <code>%</code> với số âm, so sánh float và boolean. <br><br>Để tiến bộ hơn, học sinh cần <b><u>rèn luyện thêm các dạng bài nâng cao</u></b>, tập trung xử lý ngoại lệ cú pháp và luyện đề mô phỏng nhằm nâng độ chính xác lên mức 90%+.</p>",
+                "HCM-NTT-004598": "Trong 2 buổi luyện thi HKICO, học sinh Trương Ngọc Hoàng Tri đã nắm vững kiến thức <b>cơ bản</b> về <i>biến</i>, <i>kiểu dữ liệu số</i>, <i>phép gán</i>, <b>toán tử số học</b> và <b>cấu trúc rẽ nhánh</b>, thể hiện tốc độ làm bài nhanh (100 câu/46 phút) và chính xác ở phần dễ và trung bình. Điểm mạnh là <b>nền tảng chắc</b>, xử lý tốt các câu cơ bản; điểm yếu nằm ở các câu <i>logic phức hợp</i>, <i>điều kiện lồng</i>, xử lý số âm với <code>//</code> và <code>%</code>, cũng như các bẫy liên quan đến <b>boolean</b> và <i>so sánh float</i>. Trong 60 phút cho 100 câu, học sinh <b><u>làm chủ phần lớn kiến thức</u></b> nhưng dễ mất điểm ở câu khó, vì vậy cần rèn luyện thêm ở phần <b>bẫy cú pháp</b>, <b>logic nâng cao</b> và <i>luyện đề mô phỏng</i> để đạt độ chính xác cao hơn."
+            },
+            "attachments": {
+                "Teky_HCM01-001783": [
+                    { "name": "First Assessment", "url": "BaiKiemTra/First Assessment - Đặng Minh Khôi.pdf" }
+                ],
+                "HCM-NTT-004598": [
+                    { "name": "First Assessment", "url": "BaiKiemTra/First Assessment - Trương Ngọc Hoàng Tri.pdf" }
+                ]
             }
         }
       ]

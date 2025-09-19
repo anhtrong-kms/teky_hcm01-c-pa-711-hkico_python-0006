@@ -4,11 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HKICO Python | Luyện thi - Dashboard</title>
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root{
@@ -23,74 +20,41 @@
       --warn: #f6c23e;
       --bad: #e74a3b;
     }
-    body{
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 40%, #ffffff 100%) fixed;
-      color: #2d3436;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-    }
-    .glass{
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-brd);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
-      border-radius: var(--radius);
-      box-shadow: var(--glass-shadow);
-    }
-    .nav-glass{
-      background: rgba(255,255,255,.85);
-      border-bottom: 1px solid rgba(0,0,0,.08);
-      backdrop-filter: blur(12px);
-    }
-    .brand-gradient{
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      font-weight: 800;
-    }
-    .badge-pill{ border-radius: 999px; }
-    a{ color: var(--primary); }
-    a:hover{ color: var(--accent); }
+    body{ min-height:100vh; background:linear-gradient(135deg,#f0f8ff 0%,#e6f7ff 40%,#ffffff 100%) fixed; color:#2d3436; font-family:system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+    .glass{ background:var(--glass-bg); border:1px solid var(--glass-brd); backdrop-filter:blur(var(--blur)); border-radius:var(--radius); box-shadow:var(--glass-shadow); }
+    .nav-glass{ background:rgba(255,255,255,.85); border-bottom:1px solid rgba(0,0,0,.08); backdrop-filter:blur(12px); }
+    .brand-gradient{ background:linear-gradient(90deg,var(--primary),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:800; }
+    .nav-glass .nav-link{ color:#1f2937!important; font-weight:500; }
+    .nav-glass .nav-link:hover{ color:var(--primary)!important; }
 
-    /* Navbar text colors for light background */
-    .nav-glass .navbar-brand{ color:#1f2937; }
-    .nav-glass .nav-link{ color:#1f2937 !important; font-weight:500; }
-    .nav-glass .nav-link:hover, .nav-glass .nav-link:focus{ color:var(--primary) !important; }
-
-    /* Cards */
-    .card.glass{ border: 1px solid rgba(0,0,0,.08); }
-    .card-title{ color: #2c3e50; }
-    .stat{ font-size: 1.05rem; opacity: .9; }
-
-    /* Tables */
-    .table{ color: #2d3436; }
+    .table{ color:#2d3436; }
     .table thead th{ color:#2c3e50; border-color: rgba(0,0,0,.08); }
     .table tbody td{ border-color: rgba(0,0,0,.06); }
 
-    /* Responsive tweaks */
-    @media (max-width: 768px){
-      .grid-2-sm{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
-    }
-    @media (min-width: 769px){
-      .grid-2-sm{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    }
-
-    .progress{ height: 10px; background: rgba(0,0,0,.08); }
-    .progress-bar{ background: linear-gradient(90deg, var(--primary), var(--accent)); }
+    /* Bảng chi tiết: chia cột cố định + rộng cột nhận xét */
+    .fixed-table{ table-layout:fixed; width:100%; }
+    .fixed-table colgroup col.c1{ width:7%; }   /* Buổi */
+    .fixed-table colgroup col.c2{ width:12%; }  /* Ngày */
+    .fixed-table colgroup col.c3{ width:11%; }  /* Điểm danh */
+    .fixed-table colgroup col.c4{ width:22%; }  /* Nội dung */
+    .fixed-table colgroup col.c5{ width:8%; }   /* Điểm */
+    .fixed-table colgroup col.c6{ width:32%; }  /* Nhận xét */
+    .fixed-table colgroup col.c7{ width:8%; }   /* PDF */
+    .fixed-table th, .fixed-table td{ vertical-align: top; }
+    .wrap-normal{ white-space:normal; word-break:break-word; overflow-wrap:anywhere; }
 
     .status-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:.4rem; }
-    .dot-ok{ background: var(--ok); }
-    .dot-warn{ background: var(--warn); }
-    .dot-bad{ background: var(--bad); }
+    .dot-ok{ background:var(--ok); }
+    .dot-warn{ background:var(--warn); }
+    .dot-bad{ background:var(--bad); }
   </style>
 </head>
 <body>
-  <!-- Topbar -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light nav-glass sticky-top">
-    <div class="container">
+    <div class="container-fluid">
       <a class="navbar-brand fw-bold brand-gradient" href="#home">HKICO • Python</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="#home"><i class="bi bi-house"></i> Trang chủ</a></li>
@@ -102,36 +66,37 @@
     </div>
   </nav>
 
-  <main class="container my-4">
-    <!-- Sections: rendered via JS -->
+  <main class="container-fluid my-4">
+    <!-- HOME -->
     <section id="view-home" class="d-none">
       <div class="row g-3">
         <div class="col-12 col-lg-8">
           <div class="card glass p-3">
             <div class="d-flex align-items-center justify-content-between">
               <h5 class="card-title mb-0">Thông tin lớp</h5>
-              <span id="class-code" class="badge bg-primary badge-pill"></span>
+              <span id="class-code" class="badge bg-primary rounded-pill"></span>
             </div>
             <hr class="opacity-25" />
             <div class="row g-3">
               <div class="col-12 col-md-6">
                 <div class="glass p-3">
-                  <div class="stat"><i class="bi bi-clock me-2"></i><strong>Khung giờ:</strong> <span id="class-schedule"></span></div>
-                  <div class="stat mt-2"><i class="bi bi-person-workspace me-2"></i><strong>Giáo viên:</strong> <span id="class-teacher"></span></div>
-                  <div class="stat mt-2"><i class="bi bi-link-45deg me-2"></i><strong>Link học:</strong> <a id="class-link" target="_blank" rel="noopener">Mở phòng học</a></div>
+                  <div class="mb-2"><i class="bi bi-clock me-2"></i><strong>Khung giờ:</strong> <span id="class-schedule"></span></div>
+                  <div class="mb-2"><i class="bi bi-person-workspace me-2"></i><strong>Giáo viên:</strong> <span id="class-teacher"></span></div>
+                  <div class="mb-2"><i class="bi bi-link-45deg me-2"></i><strong>Link học:</strong> <a id="class-link" target="_blank" rel="noopener">Mở phòng học</a></div>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="glass p-3">
-                  <div class="stat"><i class="bi bi-collection me-2"></i><strong>Số học phần:</strong> <span id="class-modules-count"></span></div>
-                  <div class="stat mt-2"><i class="bi bi-calendar2-week me-2"></i><strong>Tổng buổi / học phần:</strong> <span>12</span></div>
-                  <div class="stat mt-2"><i class="bi bi-people me-2"></i><strong>Sĩ số:</strong> <span id="class-students-count"></span></div>
+                  <div class="mb-2"><i class="bi bi-collection me-2"></i><strong>Số học phần:</strong> <span id="class-modules-count"></span></div>
+                  <div class="mb-2"><i class="bi bi-calendar2-week me-2"></i><strong>Tổng buổi / học phần:</strong> <span>12</span></div>
+                  <div class="mb-2"><i class="bi bi-people me-2"></i><strong>Sĩ số:</strong> <span id="class-students-count"></span></div>
                 </div>
               </div>
             </div>
             <div class="mt-3">
               <h6 class="mb-2">Danh sách học sinh</h6>
               <div id="student-chips" class="d-flex flex-wrap gap-2"></div>
+              <small class="text-muted">Bấm tên học sinh để xem nhanh chi tiết của học sinh đó.</small>
             </div>
           </div>
         </div>
@@ -153,6 +118,7 @@
       </div>
     </section>
 
+    <!-- CHARTS -->
     <section id="view-charts" class="d-none">
       <div class="card glass p-3 mb-3">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
@@ -163,18 +129,23 @@
           </div>
         </div>
       </div>
-      <div class="grid-2-sm">
-        <div class="card glass p-3">
-          <h6 class="mb-2"><i class="bi bi-graph-up"></i> Điểm trung bình theo học phần (toàn lớp)</h6>
-          <canvas id="chartModuleAvg" height="140"></canvas>
+      <div class="row g-3">
+        <div class="col-12 col-xl-6">
+          <div class="card glass p-3 h-100">
+            <h6 class="mb-2"><i class="bi bi-graph-up"></i> Điểm trung bình theo học phần (toàn lớp)</h6>
+            <canvas id="chartModuleAvg" height="140"></canvas>
+          </div>
         </div>
-        <div class="card glass p-3">
-          <h6 class="mb-2"><i class="bi bi-activity"></i> Xu hướng điểm của học sinh đã chọn</h6>
-          <canvas id="chartStudentTrend" height="140"></canvas>
+        <div class="col-12 col-xl-6">
+          <div class="card glass p-3 h-100">
+            <h6 class="mb-2"><i class="bi bi-activity"></i> Xu hướng điểm của học sinh đã chọn</h6>
+            <canvas id="chartStudentTrend" height="140"></canvas>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- DETAILS -->
     <section id="view-details" class="d-none">
       <div class="card glass p-3 mb-3">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
@@ -185,17 +156,29 @@
           </div>
         </div>
       </div>
+      <!-- Summary card for selected student & module -->
+      <div id="details-summary" class="card glass p-3 mb-3"></div>
       <div class="card glass p-0 overflow-hidden">
         <div class="table-responsive">
-          <table class="table align-middle mb-0">
+          <table class="table align-middle mb-0 fixed-table">
+            <colgroup>
+              <col class="c1" />
+              <col class="c2" />
+              <col class="c3" />
+              <col class="c4" />
+              <col class="c5" />
+              <col class="c6" />
+              <col class="c7" />
+            </colgroup>
             <thead>
               <tr>
                 <th>Buổi</th>
                 <th>Ngày</th>
                 <th>Điểm danh</th>
                 <th>Nội dung học</th>
-                <th>Điểm kiểm tra</th>
+                <th>Điểm</th>
                 <th>Nhận xét</th>
+                <th>Tệp (PDF)</th>
               </tr>
             </thead>
             <tbody id="details-body"></tbody>
@@ -204,6 +187,7 @@
       </div>
     </section>
 
+    <!-- ALERTS -->
     <section id="view-alerts" class="d-none">
       <div class="card glass p-3 mb-3">
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
@@ -221,16 +205,13 @@
     </section>
   </main>
 
-  <footer class="container mb-4">
-    <div class="text-center text-secondary small">© HKICO Python • Dashboard Luyện Thi • Nguyễn Anh Trọng</div>
+  <footer class="container-fluid mb-4">
+    <div class="text-center text-secondary small">© HKICO Python • Dashboard minh hoạ • Glass UI</div>
   </footer>
 
   <script>
-    // ------- Utilities -------
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-
-    function setHashView(view){ location.hash = view; }
     function showView(view){
       ["home","charts","details","alerts"].forEach(v=>{
         const sec = document.getElementById("view-"+v);
@@ -238,96 +219,107 @@
         if(v===view) sec.classList.remove("d-none"); else sec.classList.add("d-none");
       });
     }
+    function safeAvg(arr){ return arr?.length ? +(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) : 0; }
 
-    function safeAvg(arr){ if(!arr?.length) return 0; return +(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2); }
+    const state = { data: null, charts: { moduleAvg: null, studentTrend: null } };
 
-    // ------- State -------
-    const state = {
-      data: null,
-      charts: { moduleAvg: null, studentTrend: null },
-    };
-
-    // ------- Rendering: Home -------
+    // HOME
     function renderHome(){
       const { cls, students, modules } = state.data;
-      // info
       $("#class-code").textContent = cls.code;
       $("#class-schedule").textContent = cls.schedule;
       $("#class-teacher").textContent = cls.teacher;
       $("#class-link").href = cls.link;
       $("#class-modules-count").textContent = modules.length;
       $("#class-students-count").textContent = students.length;
-
-      // chips
-      const chips = students.map(s=>`<span class="badge text-bg-light border">${s.name}</span>`).join("");
-      $("#student-chips").innerHTML = chips;
-
-      // progress (how many sessions completed across modules)
-      const totalSessions = modules.length * 12;
-      const maxDate = new Date();
-      let completed = 0;
-      modules.forEach(m=>{ m.sessions.forEach(ss=>{ if(new Date(ss.date) <= maxDate) completed++; }); });
-      const percent = Math.min(100, Math.round(100 * completed / totalSessions));
-      $("#progress-percent").textContent = percent + "%";
-      $("#progress-bar").style.width = percent + "%";
+      $("#student-chips").innerHTML = students.map(s=>`<button type="button" class="btn btn-sm btn-outline-primary rounded-pill student-chip" data-sid="${s.id}"><i class='bi bi-person'></i> ${s.name}</button>`).join("");
+      // click to open details of this student
+      $$(".student-chip").forEach(btn=>{
+        btn.addEventListener('click', ()=>{ state.selectedStudent = btn.dataset.sid; location.hash = 'details'; });
+      });
+      const totalSessions = modules.length * 12; let completed = 0; const now = new Date();
+      modules.forEach(m=> m.sessions.forEach(ss=>{ if(new Date(ss.date)<=now) completed++; }));
+      const percent = Math.min(100, Math.round(100*completed/totalSessions));
+      $("#progress-percent").textContent = percent+"%"; $("#progress-bar").style.width = percent+"%";
     }
 
-    // ------- Charts -------
+    // CHARTS
     function buildCharts(){
       const { modules, students } = state.data;
-
-      // Module average chart (class-wide)
       const labels = modules.map(m=>m.name);
       const moduleAverages = modules.map(m=>{
-        // average across students of their average test score per module
         const perStudentAvg = students.map(s=>{
           const scores = m.sessions.map(ss => (ss.scores?.[s.id] ?? null)).filter(v=>typeof v === 'number');
           return safeAvg(scores);
         });
         return safeAvg(perStudentAvg);
       });
-
       const ctx1 = document.getElementById('chartModuleAvg');
       state.charts.moduleAvg?.destroy?.();
-      state.charts.moduleAvg = new Chart(ctx1, {
-        type: 'bar',
-        data: { labels, datasets: [{ label: 'Điểm TB', data: moduleAverages }] },
-        options: { scales: { y: { min: 0, max: 10 } } }
-      });
+      state.charts.moduleAvg = new Chart(ctx1, { type: 'bar', data: { labels, datasets: [{ label: 'Điểm TB', data: moduleAverages }] }, options: { scales: { y: { min:0, max:10 } } } });
 
-      // Student trend (selected student across modules)
       const selectStudent = document.getElementById('select-student');
-      selectStudent.innerHTML = students.map((s,i)=>`<option value="${s.id}" ${i===0?'selected':''}>${s.name}</option>`).join('');
       const selectModule = document.getElementById('select-module');
+      selectStudent.innerHTML = students.map((s,i)=>`<option value="${s.id}" ${i===0?'selected':''}>${s.name}</option>`).join('');
       selectModule.innerHTML = modules.map((m,i)=>`<option value="${m.id}" ${i===0?'selected':''}>${m.name}</option>`).join('');
-
       function renderStudentTrend(){
-        const sid = selectStudent.value;
-        const mid = selectModule.value;
-        const mod = modules.find(m=>m.id===mid);
+        const sid = selectStudent.value; const mid = selectModule.value; const mod = modules.find(m=>m.id===mid);
         const labels = mod.sessions.map((ss,idx)=>`Buổi ${idx+1}`);
         const data = mod.sessions.map(ss => (typeof ss.scores?.[sid] === 'number' ? ss.scores[sid] : null));
         const ctx2 = document.getElementById('chartStudentTrend');
         state.charts.studentTrend?.destroy?.();
-        state.charts.studentTrend = new Chart(ctx2, {
-          type: 'line',
-          data: { labels, datasets: [{ label: 'Điểm kiểm tra', data }] },
-          options: { scales: { y: { min: 0, max: 10 } } }
-        });
+        state.charts.studentTrend = new Chart(ctx2, { type: 'line', data: { labels, datasets: [{ label: 'Điểm kiểm tra', data }] }, options: { scales: { y: { min:0, max:10 } } } });
       }
-
-      selectStudent.onchange = renderStudentTrend;
-      selectModule.onchange = renderStudentTrend;
-      renderStudentTrend();
+      selectStudent.onchange = renderStudentTrend; selectModule.onchange = renderStudentTrend; renderStudentTrend();
     }
 
-    // ------- Details -------
+    // DETAILS (with per-student attachments support)
     function renderDetails(){
       const { modules, students } = state.data;
       const selMod = document.getElementById('select-module-table');
-      selMod.innerHTML = modules.map((m,i)=>`<option value="${m.id}" ${i===0?'selected':''}>${m.name}</option>`).join('');
       const selStd = document.getElementById('select-student-table');
+      selMod.innerHTML = modules.map((m,i)=>`<option value="${m.id}" ${i===0?'selected':''}>${m.name}</option>`).join('');
       selStd.innerHTML = students.map((s,i)=>`<option value="${s.id}" ${i===0?'selected':''}>${s.name}</option>`).join('');
+
+      // If a student/module was preselected (e.g., clicked from Home), apply it
+      if(state.selectedStudent && students.some(s=>s.id===state.selectedStudent)) selStd.value = state.selectedStudent;
+      if(state.selectedModule && modules.some(m=>m.id===state.selectedModule)) selMod.value = state.selectedModule;
+
+      function renderSummary(){
+        const sid = selStd.value; const mid = selMod.value;
+        const stu = students.find(s=>s.id===sid); const mod = modules.find(m=>m.id===mid);
+        const scores = mod.sessions.map(ss=>ss.scores?.[sid]).filter(v=>typeof v==='number');
+        const avg = safeAvg(scores);
+        const total = mod.sessions.length;
+        const present = mod.sessions.reduce((acc,ss)=> acc + (ss.attendance?.[sid]?1:0), 0);
+        const attRate = total ? Math.round(present*100/total) : 0;
+        const dates = mod.sessions.map(ss=>new Date(ss.date)).sort((a,b)=>a-b);
+        const dateRange = dates.length? `${dates[0].toLocaleDateString('vi-VN')} – ${dates[dates.length-1].toLocaleDateString('vi-VN')}` : '';
+        const el = document.getElementById('details-summary');
+        el.innerHTML = `
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+            <div>
+              <div class="fw-semibold mb-1"><i class="bi bi-person-badge"></i> Học sinh</div>
+              <div class="fs-5 fw-bold">${stu?.name ?? sid}</div>
+              <div class="text-muted small">Mã: ${sid}</div>
+            </div>
+            <div>
+              <div class="fw-semibold mb-1"><i class="bi bi-journal"></i> Học phần</div>
+              <div class="fs-6 fw-bold">${mod?.name ?? mid}</div>
+              <div class="text-muted small">Số buổi: ${total} • Thời gian: ${dateRange}</div>
+            </div>
+            <div class="d-flex gap-4">
+              <div>
+                <div class="text-muted small">Điểm trung bình</div>
+                <div class="fs-4 fw-bold">${avg}</div>
+              </div>
+              <div>
+                <div class="text-muted small">Chuyên cần</div>
+                <div class="fs-4 fw-bold">${attRate}%</div>
+              </div>
+            </div>
+          </div>`;
+      }
 
       function fillTable(){
         const m = modules.find(x=>x.id===selMod.value);
@@ -339,6 +331,21 @@
           const remark = ss.remarks?.[sid] ?? '';
           const topic = ss.topic ?? '';
           const date = new Date(ss.date);
+
+          // Attachments: support 2 shapes
+          // 1) Array mode: [{ studentId?, name, url }]
+          // 2) Map mode: { "<studentId>": [{ name, url }, ...] }
+          let files = [];
+          if (Array.isArray(ss.attachments)) {
+            files = ss.attachments.filter(f => !f.studentId || f.studentId === sid);
+          } else if (ss.attachments && typeof ss.attachments === 'object') {
+            const list = ss.attachments[sid];
+            if (Array.isArray(list)) files = list;
+          }
+          const attachmentsHtml = files.length
+            ? files.map((f)=>`<a href="${encodeURI(f.url)}" class="btn btn-sm btn-outline-primary me-1 mb-1" target="_blank" rel="noopener" title="${f.name}"><i class='bi bi-file-earmark-pdf'></i> ${f.name}</a>`).join('')
+            : '<span class="text-muted">-</span>';
+
           return `
             <tr>
               <td>Buổi ${idx+1}</td>
@@ -346,44 +353,30 @@
               <td>${present ? '<span class="badge text-bg-success">Có mặt</span>' : '<span class="badge text-bg-secondary">Vắng</span>'}</td>
               <td>${topic}</td>
               <td>${score}</td>
-              <td>${remark}</td>
+              <td class="wrap-normal">${remark}</td>
+              <td>${attachmentsHtml}</td>
             </tr>`;
         }).join('');
       }
-      selMod.onchange = fillTable;
-      selStd.onchange = fillTable;
+      selMod.onchange = ()=>{ renderSummary(); fillTable(); };
+      selStd.onchange = ()=>{ renderSummary(); fillTable(); };
+      renderSummary();
       fillTable();
     }
 
-    // ------- Alerts -------
+    // ALERTS
     function renderAlerts(){
       const { modules, students } = state.data;
       const thrScore = parseFloat(document.getElementById('threshold-score').value || '6');
       const thrAtt = parseFloat(document.getElementById('threshold-att').value || '75');
-
       const alerts = students.map(s=>{
-        // attendance
-        let present = 0, total = 0, scores=[];
-        modules.forEach(m=>{
-          m.sessions.forEach(ss=>{
-            total += 1;
-            if(ss.attendance?.[s.id]) present += 1;
-            const sc = ss.scores?.[s.id];
-            if(typeof sc === 'number') scores.push(sc);
-          });
-        });
-        const attRate = +(100*present/total).toFixed(1);
-        const avg = safeAvg(scores);
-        const needs = (avg < thrScore) || (attRate < thrAtt);
-        return { s, attRate, avg, needs };
-      }).filter(x=>x.needs).sort((a,b)=> (a.avg - b.avg) || (a.attRate - b.attRate));
-
+        let present=0,total=0; const scores=[];
+        modules.forEach(m=> m.sessions.forEach(ss=>{ total++; if(ss.attendance?.[s.id]) present++; const sc = ss.scores?.[s.id]; if(typeof sc==='number') scores.push(sc); }));
+        const attRate = +(100*present/total).toFixed(1); const avg = safeAvg(scores);
+        return { s, attRate, avg, needs: (avg<thrScore)||(attRate<thrAtt) };
+      }).filter(x=>x.needs).sort((a,b)=> (a.avg-b.avg) || (a.attRate-b.attRate));
       const container = document.getElementById('alerts-list');
-      if(!alerts.length){
-        container.innerHTML = `<div class="col-12"><div class="glass p-4 text-center">Không có cảnh báo theo ngưỡng đã chọn 🎉</div></div>`;
-        return;
-      }
-      container.innerHTML = alerts.map(x=>{
+      container.innerHTML = alerts.length ? alerts.map(x=>{
         const statusClass = x.avg<6 || x.attRate<60 ? 'dot-bad' : 'dot-warn';
         return `
           <div class="col-12 col-md-6 col-lg-4">
@@ -392,17 +385,16 @@
                 <h6 class="mb-1">${x.s.name}</h6>
                 <span class="status-dot ${statusClass}"></span>
               </div>
-              <div class="small opacity-75">Mã: ${x.s.id}</div>
+              <div class="small text-muted">Mã: ${x.s.id}</div>
               <hr class="opacity-25" />
               <div class="d-flex justify-content-between"><span>Điểm trung bình</span><strong>${x.avg}</strong></div>
               <div class="d-flex justify-content-between"><span>Chuyên cần</span><strong>${x.attRate}%</strong></div>
-              <div class="mt-3 small opacity-75">Gợi ý: Rà soát bài cũ, tham gia đủ buổi, đề nghị phụ đạo nếu cần.</div>
+              <div class="mt-3 small text-muted">Gợi ý: Rà soát bài cũ, tham gia đủ buổi, đề nghị phụ đạo nếu cần.</div>
             </div>
           </div>`;
-      }).join('');
+      }).join('') : `<div class="col-12"><div class="glass p-4 text-center">Không có cảnh báo theo ngưỡng đã chọn 🎉</div></div>`;
     }
 
-    // ------- Router -------
     function route(){
       const v = (location.hash.replace('#','') || 'home');
       showView(v);
@@ -411,40 +403,38 @@
       if(v==='details') renderDetails();
       if(v==='alerts') renderAlerts();
     }
-
     window.addEventListener('hashchange', route);
 
-    // ------- Load JSON -------
     async function loadData(){
       try{
         const res = await fetch('data.json', { cache: 'no-store' });
         if(!res.ok) throw new Error('Không đọc được data.json');
-        const data = await res.json();
-        state.data = data;
+        state.data = await res.json();
       }catch(err){
-        console.warn('Lỗi tải data.json, dùng dữ liệu mẫu tối thiểu để xem trước.', err);
-        // Fallback minimal sample so the UI can render without the external file.
+        console.warn('Lỗi tải data.json, dùng dữ liệu mẫu.', err);
         state.data = {
           cls: { code: 'PY-HKICO-001', schedule: '19:00–21:00 T3 & T6', link: '#', teacher: 'Thầy A' },
-          students: [ {id:'S1', name:'Nguyễn An'}, {id:'S2', name:'Trần Bình'}, {id:'S3', name:'Lê Chi'} ],
+          students: [ {id:'S1', name:'Nguyễn An'}, {id:'S2', name:'Trần Bình'} ],
           modules: Array.from({length:5}, (_,mi)=>({
             id: 'M'+(mi+1), name: 'Học phần '+(mi+1),
             sessions: Array.from({length:12}, (_,si)=>({
               date: new Date(Date.now() - (12-si)*86400000*3).toISOString(),
               topic: 'Chủ đề '+(si+1),
-              attendance: { S1: Math.random()>0.15, S2: Math.random()>0.2, S3: Math.random()>0.1 },
-              scores: { S1: +(5+Math.random()*5).toFixed(1), S2: +(5+Math.random()*5).toFixed(1), S3: +(5+Math.random()*5).toFixed(1) },
-              remarks: { S1: 'OK', S2: 'Cần luyện thêm', S3: 'Tốt' }
+              attendance: { S1: Math.random()>0.1, S2: Math.random()>0.15 },
+              scores: { S1: +(6+Math.random()*4).toFixed(1), S2: +(5.5+Math.random()*4.5).toFixed(1) },
+              remarks: { S1: 'Tiến bộ tốt, làm bài ổn định.', S2: 'Cần luyện thêm phần vòng lặp.' },
+              // Demo both shapes: map + array items
+              attachments: (si%2===0)
+                ? { S1:[{name:`Bài làm S1 - buổi ${si+1}.pdf`, url:`BaiKiemTra/S1_buoi${si+1}.pdf`}], S2:[{name:`Bài làm S2 - buổi ${si+1}.pdf`, url:`BaiKiemTra/S2_buoi${si+1}.pdf`}] }
+                : [ {name:`Đề buổi ${si+1}.pdf`, url:`BaiKiemTra/De_buoi${si+1}.pdf`}, {studentId:'S1', name:`Bài S1 buổi ${si+1}.pdf`, url:`BaiKiemTra/S1_buoi${si+1}.pdf`} ]
             }))
           }))
         };
       }
       route();
     }
-
     loadData();
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
