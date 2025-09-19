@@ -1,0 +1,76 @@
+{
+  "cls": {
+    "code": "Teky_HCM01-C-PA-711-HKICO_Python-0006",
+    "schedule": "18:00 - 20:00 Thứ 6",
+    "link": "https://meet.google.com/fti-ewuh-zcu",
+    "teacher": "Thầy Nguyễn Anh Trọng"
+  },
+  "students": [
+    { "id": "Teky_HCM01-001783", "name": "Đặng Minh Khôi" },
+    { "id": "HCM-NTT-004598", "name": "Trương Ngọc Hoàng Tri" }
+  ],
+  "modules": [
+    {
+      "id": "M1",
+      "name": "Học phần 1: Python Cơ Bản",
+      "sessions": [
+        {
+            "date": "12/09/2025",
+            "topic": "Ôn tập về biến & Kiểu dữ liệu",
+            "attendance": { 
+                "Teky_HCM01-001783": true, 
+                "HCM-NTT-004598": true
+            },
+            "scores": { 
+                "Teky_HCM01-001783": 8.5,  
+                "HCM-NTT-004598": 7.0
+            },
+            "remarks": { 
+                "Teky_HCM01-001783": "Học sinh nắm chắc kiến thức về biến và kiểu dữ liệu, làm bài tập nhanh và chính xác. Cần duy trì tốc độ hiện tại và có thể thử thêm các bài nâng cao để củng cố kiến thức.",
+                "HCM-NTT-004598": "Hiểu bài ở mức khá, trả lời được các câu hỏi cơ bản nhưng còn chậm trong phần luyện tập. Cần ôn thêm ví dụ về kiểu dữ liệu số và chuỗi để nâng cao độ chắc chắn."
+            }
+        },
+        {
+            "date": "19/09/2025",
+            "topic": "Ôn tập về cấu trúc rẽ nhánh và bài kiểm tra đầu tiên",
+            "attendance": { 
+                "Teky_HCM01-001783": true, 
+                "HCM-NTT-004598": true
+            },
+            "scores": { 
+                "Teky_HCM01-001783": 0.0,  
+                "HCM-NTT-004598": 0.0
+            },
+            "remarks": { 
+                "Teky_HCM01-001783": "NaN",
+                "HCM-NTT-004598": "NaN"
+            }
+        }
+      ]
+    },
+    {
+      "id": "M2",
+      "name": "Học phần 2: Hàm & Module",
+      "sessions": [
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "Học phần 3: Cấu trúc dữ liệu",
+      "sessions": [
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "Học phần 4: Luyện đề HKICO Cơ Bản",
+      "sessions": [
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "Học phần 5: Luyện đề HKICO Nâng Cao",
+      "sessions": [
+      ]
+    }
+  ]
+}

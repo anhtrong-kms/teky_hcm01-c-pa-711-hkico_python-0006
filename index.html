@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HKICO Python | Luyện thi - Dashboard</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-brd: rgba(0, 0, 0, 0.08);
+      --glass-shadow: 0 10px 30px rgba(0,0,0,.12);
+      --blur: 16px;
+      --radius: 22px;
+      --primary: #4e73df;
+      --accent: #1cc88a;
+      --ok: #2ecc71;
+      --warn: #f6c23e;
+      --bad: #e74a3b;
+    }
+    body{
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 40%, #ffffff 100%) fixed;
+      color: #2d3436;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    }
+    .glass{
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-brd);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      box-shadow: var(--glass-shadow);
+    }
+    .nav-glass{
+      background: rgba(255,255,255,.85);
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      backdrop-filter: blur(12px);
+    }
+    .brand-gradient{
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-weight: 800;
+    }
+    .badge-pill{ border-radius: 999px; }
+    a{ color: var(--primary); }
+    a:hover{ color: var(--accent); }
+
+    /* Navbar text colors for light background */
+    .nav-glass .navbar-brand{ color:#1f2937; }
+    .nav-glass .nav-link{ color:#1f2937 !important; font-weight:500; }
+    .nav-glass .nav-link:hover, .nav-glass .nav-link:focus{ color:var(--primary) !important; }
+
+    /* Cards */
+    .card.glass{ border: 1px solid rgba(0,0,0,.08); }
+    .card-title{ color: #2c3e50; }
+    .stat{ font-size: 1.05rem; opacity: .9; }
+
+    /* Tables */
+    .table{ color: #2d3436; }
+    .table thead th{ color:#2c3e50; border-color: rgba(0,0,0,.08); }
+    .table tbody td{ border-color: rgba(0,0,0,.06); }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px){
+      .grid-2-sm{ display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    }
+    @media (min-width: 769px){
+      .grid-2-sm{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    }
+
+    .progress{ height: 10px; background: rgba(0,0,0,.08); }
+    .progress-bar{ background: linear-gradient(90deg, var(--primary), var(--accent)); }
+
+    .status-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:.4rem; }
+    .dot-ok{ background: var(--ok); }
+    .dot-warn{ background: var(--warn); }
+    .dot-bad{ background: var(--bad); }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <nav class="navbar navbar-expand-lg navbar-light nav-glass sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold brand-gradient" href="#home">HKICO • Python</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#home"><i class="bi bi-house"></i> Trang chủ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#charts"><i class="bi bi-bar-chart"></i> Biểu đồ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#details"><i class="bi bi-journal-text"></i> Kết quả chi tiết</a></li>
+          <li class="nav-item"><a class="nav-link" href="#alerts"><i class="bi bi-exclamation-triangle"></i> Cảnh báo</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <!-- Sections: rendered via JS -->
+    <section id="view-home" class="d-none">
+      <div class="row g-3">
+        <div class="col-12 col-lg-8">
+          <div class="card glass p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <h5 class="card-title mb-0">Thông tin lớp</h5>
+              <span id="class-code" class="badge bg-primary badge-pill"></span>
+            </div>
+            <hr class="opacity-25" />
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="glass p-3">
+                  <div class="stat"><i class="bi bi-clock me-2"></i><strong>Khung giờ:</strong> <span id="class-schedule"></span></div>
+                  <div class="stat mt-2"><i class="bi bi-person-workspace me-2"></i><strong>Giáo viên:</strong> <span id="class-teacher"></span></div>
+                  <div class="stat mt-2"><i class="bi bi-link-45deg me-2"></i><strong>Link học:</strong> <a id="class-link" target="_blank" rel="noopener">Mở phòng học</a></div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="glass p-3">
+                  <div class="stat"><i class="bi bi-collection me-2"></i><strong>Số học phần:</strong> <span id="class-modules-count"></span></div>
+                  <div class="stat mt-2"><i class="bi bi-calendar2-week me-2"></i><strong>Tổng buổi / học phần:</strong> <span>12</span></div>
+                  <div class="stat mt-2"><i class="bi bi-people me-2"></i><strong>Sĩ số:</strong> <span id="class-students-count"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <h6 class="mb-2">Danh sách học sinh</h6>
+              <div id="student-chips" class="d-flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="card glass p-3 h-100">
+            <h5 class="card-title">Tổng quan nhanh</h5>
+            <hr class="opacity-25" />
+            <div class="mb-2"><span class="status-dot dot-ok"></span> Điểm trung bình ≥ 8.0</div>
+            <div class="mb-2"><span class="status-dot dot-warn"></span> 6.0 – 7.9</div>
+            <div class="mb-2"><span class="status-dot dot-bad"></span> &lt; 6.0 hoặc chuyên cần thấp</div>
+            <div class="mt-3">
+              <div class="d-flex justify-content-between"><small>Tiến độ hoàn thành học phần</small><small id="progress-percent">0%</small></div>
+              <div class="progress mt-1" role="progressbar" aria-label="Tiến độ">
+                <div id="progress-bar" class="progress-bar" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-charts" class="d-none">
+      <div class="card glass p-3 mb-3">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+          <h5 class="card-title mb-0">Biểu đồ kết quả</h5>
+          <div class="d-flex gap-2">
+            <select id="select-student" class="form-select form-select-sm w-auto"></select>
+            <select id="select-module" class="form-select form-select-sm w-auto"></select>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2-sm">
+        <div class="card glass p-3">
+          <h6 class="mb-2"><i class="bi bi-graph-up"></i> Điểm trung bình theo học phần (toàn lớp)</h6>
+          <canvas id="chartModuleAvg" height="140"></canvas>
+        </div>
+        <div class="card glass p-3">
+          <h6 class="mb-2"><i class="bi bi-activity"></i> Xu hướng điểm của học sinh đã chọn</h6>
+          <canvas id="chartStudentTrend" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-details" class="d-none">
+      <div class="card glass p-3 mb-3">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+          <h5 class="card-title mb-0">Kết quả chi tiết theo buổi</h5>
+          <div class="d-flex gap-2">
+            <select id="select-module-table" class="form-select form-select-sm w-auto"></select>
+            <select id="select-student-table" class="form-select form-select-sm w-auto"></select>
+          </div>
+        </div>
+      </div>
+      <div class="card glass p-0 overflow-hidden">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Buổi</th>
+                <th>Ngày</th>
+                <th>Điểm danh</th>
+                <th>Nội dung học</th>
+                <th>Điểm kiểm tra</th>
+                <th>Nhận xét</th>
+              </tr>
+            </thead>
+            <tbody id="details-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-alerts" class="d-none">
+      <div class="card glass p-3 mb-3">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+          <h5 class="card-title mb-0">Cảnh báo học sinh cần cải thiện</h5>
+          <div class="d-flex gap-2">
+            <label class="form-label me-2 mb-0">Ngưỡng điểm TB</label>
+            <input id="threshold-score" type="number" step="0.1" value="6.0" class="form-control form-control-sm w-auto" />
+            <label class="form-label ms-3 me-2 mb-0">Ngưỡng chuyên cần (%)</label>
+            <input id="threshold-att" type="number" value="75" class="form-control form-control-sm w-auto" />
+            <button id="btn-recalc" class="btn btn-sm btn-primary"><i class="bi bi-arrow-repeat"></i> Tính lại</button>
+          </div>
+        </div>
+      </div>
+      <div id="alerts-list" class="row g-3"></div>
+    </section>
+  </main>
+
+  <footer class="container mb-4">
+    <div class="text-center text-secondary small">© HKICO Python • Dashboard Luyện Thi • Nguyễn Anh Trọng</div>
+  </footer>
+
+  <script>
+    // ------- Utilities -------
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+    function setHashView(view){ location.hash = view; }
+    function showView(view){
+      ["home","charts","details","alerts"].forEach(v=>{
+        const sec = document.getElementById("view-"+v);
+        if(!sec) return;
+        if(v===view) sec.classList.remove("d-none"); else sec.classList.add("d-none");
+      });
+    }
+
+    function safeAvg(arr){ if(!arr?.length) return 0; return +(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2); }
+
+    // ------- State -------
+    const state = {
+      data: null,
+      charts: { moduleAvg: null, studentTrend: null },
+    };
+
+    // ------- Rendering: Home -------
+    function renderHome(){
+      const { cls, students, modules } = state.data;
+      // info
+      $("#class-code").textContent = cls.code;
+      $("#class-schedule").textContent = cls.schedule;
+      $("#class-teacher").textContent = cls.teacher;
+      $("#class-link").href = cls.link;
+      $("#class-modules-count").textContent = modules.length;
+      $("#class-students-count").textContent = students.length;
+
+      // chips
+      const chips = students.map(s=>`<span class="badge text-bg-light border">${s.name}</span>`).join("");
+      $("#student-chips").innerHTML = chips;
+
+      // progress (how many sessions completed across modules)
+      const totalSessions = modules.length * 12;
+      const maxDate = new Date();
+      let completed = 0;
+      modules.forEach(m=>{ m.sessions.forEach(ss=>{ if(new Date(ss.date) <= maxDate) completed++; }); });
+      const percent = Math.min(100, Math.round(100 * completed / totalSessions));
+      $("#progress-percent").textContent = percent + "%";
+      $("#progress-bar").style.width = percent + "%";
+    }
+
+    // ------- Charts -------
+    function buildCharts(){
+      const { modules, students } = state.data;
+
+      // Module average chart (class-wide)
+      const labels = modules.map(m=>m.name);
+      const moduleAverages = modules.map(m=>{
+        // average across students of their average test score per module
+        const perStudentAvg = students.map(s=>{
+          const scores = m.sessions.map(ss => (ss.scores?.[s.id] ?? null)).filter(v=>typeof v === 'number');
+          return safeAvg(scores);
+        });
+        return safeAvg(perStudentAvg);
+      });
+
+      const ctx1 = document.getElementById('chartModuleAvg');
+      state.charts.moduleAvg?.destroy?.();
+      state.charts.moduleAvg = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Điểm TB', data: moduleAverages }] },
+        options: { scales: { y: { min: 0, max: 10 } } }
+      });
+
+      // Student trend (selected student across modules)
+      const selectStudent = document.getElementById('select-student');
+      selectStudent.innerHTML = students.map((s,i)=>`<option value="${s.id}" ${i===0?'selected':''}>${s.name}</option>`).join('');
+      const selectModule = document.getElementById('select-module');
+      selectModule.innerHTML = modules.map((m,i)=>`<option value="${m.id}" ${i===0?'selected':''}>${m.name}</option>`).join('');
+
+      function renderStudentTrend(){
+        const sid = selectStudent.value;
+        const mid = selectModule.value;
+        const mod = modules.find(m=>m.id===mid);
+        const labels = mod.sessions.map((ss,idx)=>`Buổi ${idx+1}`);
+        const data = mod.sessions.map(ss => (typeof ss.scores?.[sid] === 'number' ? ss.scores[sid] : null));
+        const ctx2 = document.getElementById('chartStudentTrend');
+        state.charts.studentTrend?.destroy?.();
+        state.charts.studentTrend = new Chart(ctx2, {
+          type: 'line',
+          data: { labels, datasets: [{ label: 'Điểm kiểm tra', data }] },
+          options: { scales: { y: { min: 0, max: 10 } } }
+        });
+      }
+
+      selectStudent.onchange = renderStudentTrend;
+      selectModule.onchange = renderStudentTrend;
+      renderStudentTrend();
+    }
+
+    // ------- Details -------
+    function renderDetails(){
+      const { modules, students } = state.data;
+      const selMod = document.getElementById('select-module-table');
+      selMod.innerHTML = modules.map((m,i)=>`<option value="${m.id}" ${i===0?'selected':''}>${m.name}</option>`).join('');
+      const selStd = document.getElementById('select-student-table');
+      selStd.innerHTML = students.map((s,i)=>`<option value="${s.id}" ${i===0?'selected':''}>${s.name}</option>`).join('');
+
+      function fillTable(){
+        const m = modules.find(x=>x.id===selMod.value);
+        const sid = selStd.value;
+        const tbody = document.getElementById('details-body');
+        tbody.innerHTML = m.sessions.map((ss, idx)=>{
+          const present = !!(ss.attendance?.[sid]);
+          const score = (typeof ss.scores?.[sid] === 'number') ? ss.scores[sid] : '-';
+          const remark = ss.remarks?.[sid] ?? '';
+          const topic = ss.topic ?? '';
+          const date = new Date(ss.date);
+          return `
+            <tr>
+              <td>Buổi ${idx+1}</td>
+              <td>${date.toLocaleDateString('vi-VN')}</td>
+              <td>${present ? '<span class="badge text-bg-success">Có mặt</span>' : '<span class="badge text-bg-secondary">Vắng</span>'}</td>
+              <td>${topic}</td>
+              <td>${score}</td>
+              <td>${remark}</td>
+            </tr>`;
+        }).join('');
+      }
+      selMod.onchange = fillTable;
+      selStd.onchange = fillTable;
+      fillTable();
+    }
+
+    // ------- Alerts -------
+    function renderAlerts(){
+      const { modules, students } = state.data;
+      const thrScore = parseFloat(document.getElementById('threshold-score').value || '6');
+      const thrAtt = parseFloat(document.getElementById('threshold-att').value || '75');
+
+      const alerts = students.map(s=>{
+        // attendance
+        let present = 0, total = 0, scores=[];
+        modules.forEach(m=>{
+          m.sessions.forEach(ss=>{
+            total += 1;
+            if(ss.attendance?.[s.id]) present += 1;
+            const sc = ss.scores?.[s.id];
+            if(typeof sc === 'number') scores.push(sc);
+          });
+        });
+        const attRate = +(100*present/total).toFixed(1);
+        const avg = safeAvg(scores);
+        const needs = (avg < thrScore) || (attRate < thrAtt);
+        return { s, attRate, avg, needs };
+      }).filter(x=>x.needs).sort((a,b)=> (a.avg - b.avg) || (a.attRate - b.attRate));
+
+      const container = document.getElementById('alerts-list');
+      if(!alerts.length){
+        container.innerHTML = `<div class="col-12"><div class="glass p-4 text-center">Không có cảnh báo theo ngưỡng đã chọn 🎉</div></div>`;
+        return;
+      }
+      container.innerHTML = alerts.map(x=>{
+        const statusClass = x.avg<6 || x.attRate<60 ? 'dot-bad' : 'dot-warn';
+        return `
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card glass p-3 h-100">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-1">${x.s.name}</h6>
+                <span class="status-dot ${statusClass}"></span>
+              </div>
+              <div class="small opacity-75">Mã: ${x.s.id}</div>
+              <hr class="opacity-25" />
+              <div class="d-flex justify-content-between"><span>Điểm trung bình</span><strong>${x.avg}</strong></div>
+              <div class="d-flex justify-content-between"><span>Chuyên cần</span><strong>${x.attRate}%</strong></div>
+              <div class="mt-3 small opacity-75">Gợi ý: Rà soát bài cũ, tham gia đủ buổi, đề nghị phụ đạo nếu cần.</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ------- Router -------
+    function route(){
+      const v = (location.hash.replace('#','') || 'home');
+      showView(v);
+      if(v==='home') renderHome();
+      if(v==='charts') buildCharts();
+      if(v==='details') renderDetails();
+      if(v==='alerts') renderAlerts();
+    }
+
+    window.addEventListener('hashchange', route);
+
+    // ------- Load JSON -------
+    async function loadData(){
+      try{
+        const res = await fetch('data.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('Không đọc được data.json');
+        const data = await res.json();
+        state.data = data;
+      }catch(err){
+        console.warn('Lỗi tải data.json, dùng dữ liệu mẫu tối thiểu để xem trước.', err);
+        // Fallback minimal sample so the UI can render without the external file.
+        state.data = {
+          cls: { code: 'PY-HKICO-001', schedule: '19:00–21:00 T3 & T6', link: '#', teacher: 'Thầy A' },
+          students: [ {id:'S1', name:'Nguyễn An'}, {id:'S2', name:'Trần Bình'}, {id:'S3', name:'Lê Chi'} ],
+          modules: Array.from({length:5}, (_,mi)=>({
+            id: 'M'+(mi+1), name: 'Học phần '+(mi+1),
+            sessions: Array.from({length:12}, (_,si)=>({
+              date: new Date(Date.now() - (12-si)*86400000*3).toISOString(),
+              topic: 'Chủ đề '+(si+1),
+              attendance: { S1: Math.random()>0.15, S2: Math.random()>0.2, S3: Math.random()>0.1 },
+              scores: { S1: +(5+Math.random()*5).toFixed(1), S2: +(5+Math.random()*5).toFixed(1), S3: +(5+Math.random()*5).toFixed(1) },
+              remarks: { S1: 'OK', S2: 'Cần luyện thêm', S3: 'Tốt' }
+            }))
+          }))
+        };
+      }
+      route();
+    }
+
+    loadData();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
